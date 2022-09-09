@@ -18,19 +18,10 @@ def shape_problem():
     # values count as solutions using propositional
     # logic, but in the slightly different syntax
     # of Z3 expressions.
-<<<<<<< HEAD
-    
-    C1 = (T+S+C == 10)    
-    C2 = (C+S-T == 6)     
-    C3 = (C+T-S == 4)   
-    C = And(C1, C2, C3)
-      
-=======
     C1 = (T + S + C == 10)    
     C2 = ((C + S - T) == 6) 
     C3 = ((C + T - S) == 4)    
     C = And(C1, C2, C3)     # combine using logical "and"
->>>>>>> 5779e4baff43c1917c72c67c9391c88923ed1090
     
     
     # Create a Z3 "SMT" solver object, and give it 
@@ -49,19 +40,8 @@ def shape_problem():
     return -1
 
 # Set up and run the function and report its results
-<<<<<<< HEAD
-
-=======
->>>>>>> 5779e4baff43c1917c72c67c9391c88923ed1090
 s = shape_problem()
 if (s == -1) :
     print("There is no solution")
 else :
-<<<<<<< HEAD
-    print("The solution is", s)
-    
-
- 
-=======
     print("A solution is", s)
->>>>>>> 5779e4baff43c1917c72c67c9391c88923ed1090
