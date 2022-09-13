@@ -22,7 +22,6 @@ def hw2():
     
     s.add(Not(C1))
     # I believe it's not valid
-  
     r = s.check()
     
     # If there's a model/solution return it 
