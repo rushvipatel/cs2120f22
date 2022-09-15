@@ -24,6 +24,8 @@ def hw2():
     
     s.reset()
     # I believe it's not valid
+    #This is not valid because if both x and y are true then the statement would not
+    #imply false for y
     
     # 2. X, Y ⊢ X ∧ Y              -- and introduction
     C2 = Implies(And(X,Y),And(X,Y))
@@ -97,7 +99,7 @@ def hw2():
         print("Here's a counter-example: ", s.model() )
     s.reset()
     # # 9. X → Y, ¬X ⊢ ¬ Y           -- denying the antecedent
-    C9 = Implies(X,Or(X,Y))
+    C9 = Implies(And(Implies(X,Y),Not(X)),Not(Y))
     s.add(Not(C9))
     r = s.check()
     if (r == unsat):
@@ -105,6 +107,8 @@ def hw2():
     else :
         print("Here's a counter-example: ", s.model() )
     s.reset()
+    #This is not valid because X being false does not 
+    #imply that Y is false as well when X implies Y. 
     # 10. X → Y, Y → X ⊢ X ↔ Y      -- iff introduction
     C10 = Implies((And(Implies(X,Y), Implies(Y,X))),And(Implies(X,Y),Implies(Y,X)))
     s.add(Not(C10))
@@ -150,6 +154,10 @@ def hw2():
     else :
         print("Here's a counter-example: ", s.model() )
     s.reset()
+    #This is invalid because its saying that just because Y is true because of X, then 
+    #X must be true because of Y which is not always the case like when x is false and y
+    #is true
+
     # 15. X → Y, X ⊢ Y             -- arrow elimination
     C15 = Implies(And(Implies(X,Y),X),Y)
     s.add(Not(C15))
@@ -177,6 +185,8 @@ def hw2():
     else :
         print("Here's a counter-example: ", s.model() )
     s.reset()
+    #This is not valid because when x is false and y is true, the conclusion is being 
+    #affirmed which is a fallacy
     # 18. X → Y ⊢ ¬Y → ¬X          -- contrapositive
     C18 = Implies(Implies(X,Y),Implies(Not(Y),Not(X)))
     s.add(Not(C18))
@@ -187,7 +197,7 @@ def hw2():
         print("Here's a counter-example: ", s.model() )
     s.reset()
     # 19. ¬(X ∨ Y) ↔ ¬X ∧ ¬Y       -- DeMorgan #1 (¬ distributes over ∨)
-    C19 = And(Implies(Not(And(X,Y)), And(Not(X),Not(Y))), Implies(And(Not(X),Not(Y)),Not(And(X,Y))))
+    C19 =  And(Implies(Not(Or(X,Y)),And(Not(X),Not(Y))) ,Implies(And(Not(X),Not(Y)),Not(Or(X,Y))))
     s.add(Not(C19))
     r = s.check()
     if (r == unsat):
