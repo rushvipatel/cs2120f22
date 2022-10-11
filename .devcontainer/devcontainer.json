@@ -37,15 +37,11 @@
 		"njpwerner.autodocstring",
 		"oderwat.indent-rainbow",
 		"GitHub.vscode-pull-request-github",
-<<<<<<< HEAD
-		"dafny-lang.ide-vscode"
-=======
 		"ms-vsliveshare.vsliveshare-audio",
 		"ms-vsliveshare.vsliveshare-pack",
 		"ms-vscode.cpptools",
 		"ms-vscode.cpptools-extension-pack",
 		"alygin.vscode-tlaplus"
->>>>>>> 64f30fdaf802de65cded8c66094ee5d88e0afff1
 	],
 	"forwardPorts": []
 	// Use 'postCreateCommand' to run commands after the container is created.
