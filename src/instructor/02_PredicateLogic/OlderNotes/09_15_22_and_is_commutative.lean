@@ -50,9 +50,11 @@ begin           -- and now, between begin/end, we build the proof
   exact q,
 -/
   -- In either case, we can prove that Q ∨ P is true. QED.
+  
 assume P Q h,
 cases h with p q,      -- applies or.elim to h
 exact or.inr p,
+
 -- exact or.inl q,
 end
 
