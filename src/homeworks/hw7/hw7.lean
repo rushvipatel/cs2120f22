@@ -12,6 +12,10 @@ English language proof.
 
 example (α : Type) (P : α → Prop) : (∃ a, P a) → (¬(∀ x, ¬ P x)) :=
 begin
+  intros a b,
+  cases a with x y,
+  have noty := b x,
+  contradiction,
 end
 
 
@@ -23,7 +27,7 @@ object that has it. If you try to prove the converse in
 our constructive logic, what happens? Show you work, and
 then briefly but clearly explain exactly what goes wrong.
 -/
-
+-- We cannot prove this without classical reasoning
 
 
 /- #2
@@ -34,10 +38,10 @@ answer yes/no then briefly justify your answer.
 
 ( domain = ℕ, r = {(0,0),(1,1),(2,2)}, co-domain=ℕ )
 
-A. Is this relation reflexive? 
-B. Is this relation symmetric? 
-C. Is this relation transitive? 
-D. Is this relation an equivalence relation? 
+A. Is this relation reflexive? No, the set holds 0 1 and 2 but the domain is all real numbers
+B. Is this relation symmetric? Yes, because for every a and b in the set, b = a and a = b
+C. Is this relation transitive? Yes, a = b and b = c which means a = c
+D. Is this relation an equivalence relation? No, since it is not reflexive
 -/
 
 
@@ -50,6 +54,9 @@ and if r b a then a = b. Give an example of a familiar
 arithmetic relation that's anti-symmetric, and briefly
 explain why it's so.
 -/
+-- division is an anti-symmetric relation for positive integers because if a is divisible by b and 
+-- b is divisible by a then a = b 
+--
 
 
 /- #4
@@ -70,9 +77,8 @@ def is_asymmetric
 Name a familar arithmetic relation that's asymmetric
 and briefly explain why you think it's asymmetric.
 
-Answer here:
+Answer here: a - b is asymmetric because a - b is in the relation but b-a is not
 -/
-
 /- C: 
 
 An object cannot be related to itself in an asymmetric
@@ -81,10 +87,10 @@ of this statement.
 
 Proof: Assume α, r, and a are as given (and in particular
 assume that r is asymmetric). Now assume r a a. <finish
-the proof>.
+the proof>. 
 
-Answer here (rest of proof): 
--/
+Answer here (rest of proof): ¬r a a is true by contradiction
+-/ 
 
 /- D.
 
@@ -101,7 +107,12 @@ example
 ¬ ∃ (a : α), r a a :=
 begin
 -- proof by negation
-
+  assume h, -- assume premise
+  cases h with a b, -- cases 
+  unfold is_asymmetric at h,
+  have h2 := h a a, --apply a to h
+  have nraa := h2 b, --apply ¬raa to raa 
+  contradiction, --cannot have a proof of both raa and ¬raa
 end
 
 
@@ -114,6 +125,11 @@ that α is inhabited.
 
 example (α : Type) (a : α): ¬ is_asymmetric (@eq α) :=
 begin
+  assume h,
+  unfold is_asymmetric at h,
+  have x := h a a,
+  have neq := x rfl,
+  contradiction,
 end
 
 /- Extra credit: What exactly goes wrong in a formal 
@@ -145,6 +161,21 @@ have covered in class.
 
 example : ∀ m : ℕ, equivalence (equiv_mod_m m) :=
 begin
+  assume h,
+  unfold equivalence equiv_mod_m,
+  split,
+  unfold reflexive,
+  assume j,
+  exact rfl,
+  split,
+  unfold symmetric,
+  assume a b,
+  assume h,
+  rw h,
+  unfold transitive,
+  assume a b c d e,
+  rw d,
+  rw e,
 end
 
 
@@ -160,12 +191,12 @@ a very brief justification of each answer. Assume
 the domain is all living persons, and the co-domain
 is all natural numbers.
 
--- it's a function: 
--- it's total: 
--- it's injective (where "): 
--- it's surjective (where the co-domain is all ℕ):
--- it's strictly partial:  
--- it's bijective: 
+-- it's a function: yes, its single valued
+-- it's total: no, because there are people in the us with id numbers
+-- it's injective (where "): yes, every output has one input
+-- it's surjective (where the co-domain is all ℕ): no, not every possible output does not have an input
+-- it's strictly partial: yes, not every input has an output
+-- it's bijective: no, not both injective and surjective
 -/
 
 
@@ -176,9 +207,9 @@ numbers. Which of the following properties does
 it have? Explain each answer enough to show you
 know why your answer is correct.
 
--- reflexive:
--- symmetric: 
--- transitive:
+-- reflexive: no, there are no elements in the relation which means it cannot be related it itself
+-- symmetric: yes, since the antecedent is always false
+-- transitive: yes, since the antecedent is always false
 -/
 
 
@@ -205,22 +236,22 @@ of a good English language proof.
 example : ¬reflexive empty_rel :=
 begin
 unfold reflexive,
-assume h,
-let x := h 0,
-cases x,
+assume h, -- assume premise and prove false
+let x := h 0, --let x be the empty relation
+cases x, -- cases for relation
 end
 
 example : symmetric empty_rel :=
 begin
-unfold symmetric,
-assume a b h,
-cases h,
+unfold symmetric, -- unfold definition
+assume a b h,-- empty relation with a and b
+cases h, -- cases applied with h
 end
 
 example : transitive empty_rel :=
 begin
-assume a b c h k,
-cases h,
+assume a b c h k, -- assume empty relations with ab and bc
+cases h, -- cases with a b
 end
 
 /- #10
@@ -233,9 +264,9 @@ S (of objects of some type), is a partial order.
 Pf:  
 Suppose S is a set, with a ⊆ S and b ⊆ S subsets. Then
 
-1. 
-2. 
-3. 
+1. reflexive, a is a subset of itself
+2. anti-symmetric, if a is a subset of b and b is a subset of a then a is equal to b
+3. transitive, if a is a subset of b and b is a subset of c then a is a subset of c
 
 QED.
 -/
@@ -274,6 +305,29 @@ example
   (a b: set α) :
   (a ∪ b)ᶜ = aᶜ ∩ bᶜ := 
 begin
+  ext,
+  split,
+
+  assume notaub, 
+  split, 
+  assume h,
+  have aub := or.inl h, 
+  have f := notaub aub,
+  contradiction,
+
+  assume j,
+  have aub := or.inr j, 
+  have f := notaub aub,
+  contradiction,
+
+  assume acbc,
+  assume aub,
+  cases aub with a b,
+  have ac := acbc.left,
+  contradiction,
+  have bc := acbc.right,
+  contradiction,
+
 end
 
 
