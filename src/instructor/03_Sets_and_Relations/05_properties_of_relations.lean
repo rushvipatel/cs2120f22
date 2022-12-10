@@ -161,7 +161,6 @@ begin
 
   -- assume a is an arbitrary value
   assume a,
-
   -- prove a = a "by reflexivity of eq"
   exact eq.refl a,
 end
